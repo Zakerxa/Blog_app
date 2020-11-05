@@ -1,3 +1,47 @@
+<?php
+  require 'config/config.php';
+  session_start();
+  if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
+  header('location: login.php');
+  }
+  //for showing result
+  $stmt = $pdo->prepare("SELECT * FROM posts WHERE id=".$_GET['id']);
+  $stmt->execute();
+  $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  //for comment
+  $blogId = $_GET['id'];
+  if($_POST){
+  $comment = $_POST['comment'];
+
+  $stmt = $pdo->prepare("INSERT INTO comments(content,author_id,post_id) VALUES(:content,:author_id,:post_id)");
+        $result=$stmt->execute(
+            array(
+                ':content'=>$comment,
+                ':author_id'=>$_SESSION['user_id'],
+                ':post_id'=>$blogId
+                )
+            );
+        
+        if($result){
+            header('location: blogdetail.php?id='.$_GET['id']);
+
+        }
+  }
+  //for showing comments
+  $stmtcmt = $pdo->prepare("SELECT * FROM comments WHERE post_id=$blogId");
+  $stmtcmt->execute();
+  $output = $stmtcmt->fetch(PDO::FETCH_ASSOC);
+
+
+  $authorId =$output['author_id'];
+  $stmtauth = $pdo->prepare("SELECT * FROM users WHERE id=$authorId");
+  $stmtauth->execute();
+  $outputauth = $stmtauth->fetch(PDO::FETCH_ASSOC);
+            
+            
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,52 +69,36 @@
             <div class="card card-widget">
               <div class="card-header">
                 <div class="card-title" style="text-align:center !important;float:none;">
-                  <h4>Blog Title</h4>
+                  <h4><?php echo $result['title']?></h4>
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
+                <img class="img-fluid pad" src="admin/images/<?php echo $result['image']?>" alt="Photo" width="100%">
+                <br><br>
+                <p><?php echo $result['content']?></p><hr>
+                <h3>Comments</h3><hr>
+                <a href="index.php" type="button" class="btn btn-default">Go Back</a>
+              </div>
               <!-- /.card-body -->
               <div class="card-footer card-comments">
                 <div class="card-comment">
-                  <!-- User image -->
-                  <img class="img-circle img-sm" src="dist/img/user3-128x128.jpg" alt="User Image">
-
-                  <div class="comment-text">
+                <div class="comment-text" style="margin-left:0px !important;float:none;">
                     <span class="username">
-                      Maria Gonzales
-                      <span class="text-muted float-right">8:03 PM Today</span>
+                      <?php echo $outputauth['name']?>
+                      <span class="text-muted float-right"><?php echo $output['created_at']?></span>
                     </span><!-- /.username -->
-                    It is a long established fact that a reader will distracted
-                    by the readable content of a page when looking at its layout.
-                  </div>
-                  <!-- /.comment-text -->
+                    <?php echo $output['content']?>
                 </div>
-                <!-- /.card-comment -->
-                <div class="card-comment">
-                  <!-- User image -->
-                  <img class="img-circle img-sm" src="dist/img/user4-128x128.jpg" alt="User Image">
 
-                  <div class="comment-text">
-                    <span class="username">
-                      Luna Stark
-                      <span class="text-muted float-right">8:03 PM Today</span>
-                    </span><!-- /.username -->
-                    It is a long established fact that a reader will distracted
-                    by the readable content of a page when looking at its layout.
-                  </div>
-                  <!-- /.comment-text -->
                 </div>
                 <!-- /.card-comment -->
               </div>
               <!-- /.card-footer -->
               <div class="card-footer">
-                <form action="#" method="post">
-                  <img class="img-fluid img-circle img-sm" src="dist/img/user4-128x128.jpg" alt="Alt Text">
-                  <!-- .img-push is used to add margin to elements next to floating images -->
+                <form action="" method="post">
                   <div class="img-push">
-                    <input type="text" class="form-control form-control-sm" placeholder="Press enter to post comment">
+                    <input type="text" name="comment" class="form-control form-control-sm" placeholder="Press enter to post comment">
                   </div>
                 </form>
               </div>
@@ -93,13 +121,17 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer" style="margin-left:0px;">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.0.5
+ <!-- Main Footer -->
+ <footer class="main-footer" style="margin-left:0px !important;">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline mb-2">
+    <a href="logout.php" type="button" class="btn btn-default">Logout</a>
     </div>
-    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
-    reserved.
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2020 <a href="https://adminlte.io">Sunshine</a>.</strong> All rights reserved.
   </footer>
+</div>
+<!-- ./wrapper -->
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
