@@ -31,13 +31,21 @@
   //for showing comments
   $stmtcmt = $pdo->prepare("SELECT * FROM comments WHERE post_id=$blogId");
   $stmtcmt->execute();
-  $output = $stmtcmt->fetch(PDO::FETCH_ASSOC);
-
-
-  $authorId =$output['author_id'];
+  $cmtOutput = $stmtcmt->fetchAll();
+  
+  $outputauth=[];
+  if($cmtOutput){
+  foreach($cmtOutput as $key =>$value){
+    
+  $authorId =$cmtOutput[$key]['author_id'];
   $stmtauth = $pdo->prepare("SELECT * FROM users WHERE id=$authorId");
   $stmtauth->execute();
-  $outputauth = $stmtauth->fetch(PDO::FETCH_ASSOC);
+  $outputauth[] = $stmtauth->fetchAll();
+  
+  }
+
+  }
+
             
             
 ?>
@@ -47,7 +55,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Widgets</title>
+  <title>Blog Site</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -83,13 +91,24 @@
               <!-- /.card-body -->
               <div class="card-footer card-comments">
                 <div class="card-comment">
-                <div class="comment-text" style="margin-left:0px !important;float:none;">
-                    <span class="username">
-                      <?php echo $outputauth['name']?>
-                      <span class="text-muted float-right"><?php echo $output['created_at']?></span>
+                <?php
+                  if($cmtOutput){
+                ?>
+                  <div class="comment-text" style="margin-left:0px !important;float:none;">
+                  <?php foreach($cmtOutput as $key => $value){
+                  ?>
+                  <span class="username">
+                      <?php echo $outputauth[$key][0]['name'];?>
+                      <span class="text-muted float-right"><?php echo $value['created_at']?></span>
                     </span><!-- /.username -->
-                    <?php echo $output['content']?>
-                </div>
+                    <?php echo $value['content']?>
+                  <?php
+                  }
+                  ?>
+                  </div>
+                <?php
+                  }
+                ?>
 
                 </div>
                 <!-- /.card-comment -->

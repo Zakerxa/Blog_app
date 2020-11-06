@@ -9,12 +9,16 @@
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if($result){
-          if($result['password'] == $password){
-            $_SESSION['user_id'] = $result['id'];
-            $_SESSION['user_name'] = $result['name'];
-            $_SESSION['logged_in'] = time();
-            header('location: index.php');
-
+          if($result['role'] == '1'){
+            if($result['password'] == $password){
+              $_SESSION['user_id'] = $result['id'];
+              $_SESSION['user_name'] = $result['name'];
+              $_SESSION['logged_in'] = time();
+              header('location: index.php');
+  
+            }
+          }else{
+            echo"<script>alert('You're not Admin! Can't Login!');window.location.href='login.php';</script>";
           }
         }else{
           echo"<script>alert('Incorrect email and password');window.location.href='login.php';</script>";

@@ -2,7 +2,8 @@
 require '../config/config.php';
 session_start();
 if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
-  header('location: login.php');
+    
+header('location: login.php');
   
 }
 if($_POST){
@@ -61,7 +62,7 @@ if($_POST){
 
 ?>
 
-<?php include('header.html')?>
+<?php include('header.php')?>
 
     <!-- Main content -->
     <section class="content">

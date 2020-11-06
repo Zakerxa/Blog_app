@@ -16,7 +16,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Blog listings</h3>
+                <h3 class="card-title">User listings</h3>
               </div>
               <!-- /.card-header -->
               <?php
@@ -30,23 +30,23 @@
 
                 if(empty($_POST['search'])){
 
-                  $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
+                  $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
                   $stmt->execute();
                   $rawResult = $stmt->fetchAll();
                   $total_pages = ceil(count($rawResult)/$numOfrecords);
 
-                  $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offest,$numOfrecords");
+                  $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT $offest,$numOfrecords");
                   $stmt->execute();
                   $result = $stmt->fetchAll();
                 }else{
                   $search = $_POST['search'];
-                  $stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$search%' ORDER BY id DESC");
+                  $stmt = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%$search%' ORDER BY id DESC");
                   $stmt->execute();
                   $rawResult = $stmt->fetchAll();
 
                   $total_pages = ceil(count($rawResult)/$numOfrecords);
 
-                  $stmt = $pdo->prepare("SELECT * FROM posts WHERE title LIKE '%$search%' ORDER BY id DESC LIMIT $offest,$numOfrecords");
+                  $stmt = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%$search%' ORDER BY id DESC LIMIT $offest,$numOfrecords");
                   $stmt->execute();
                   $result = $stmt->fetchAll();
                 }
@@ -55,14 +55,15 @@
               
               <div class="card-body">
                 <div>
-                  <a href="add.php" type="button" class="btn btn-success">New Blog Post</a>
+                  <a href="user_add.php" type="button" class="btn btn-success">Create User</a>
                 </div><br>
                 <table class="table table-bordered">
                   <thead>                  
                     <tr>
                       <th style="width: 10px">ID</th>
-                      <th>Title</th>
-                      <th>Content</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
                       <th style="width: 40px">Action</th>
                     </tr>
                   </thead>
@@ -74,15 +75,16 @@
                     ?>
                       <tr>
                       <td><?php echo $i ?></td>
-                      <td><?php echo $value['title'] ?></td>
-                      <td><?php echo substr($value['content'],0,90) ?></td>
+                      <td><?php echo $value['name'] ?></td>
+                      <td><?php echo $value['email'] ?></td>
+                      <td><?php  if($value['role'] == '0'){echo "user";}else{echo "admin";} ?></td>
                       <td>
                         <div class="btn-group">
                           <div class="container">
-                            <a href="edit.php?id=<?php echo $value['id']?>" type="button" class="btn btn-warning">Edit</a>
+                            <a href="user_edit.php?id=<?php echo $value['id']?>" type="button" class="btn btn-warning">Edit</a>
                           </div>
                           <div class="container">
-                            <a href="delete.php?id=<?php echo $value['id']?>" type="button" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
+                            <a href="user_delete.php?id=<?php echo $value['id']?>" type="button" class="btn btn-danger" onclick="return confirm('Are you sure to delete?');">Delete</a>
                           </div>
                         </div>
                       </td>
