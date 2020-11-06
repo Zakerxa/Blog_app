@@ -2,7 +2,19 @@
   require '../config/config.php';
   session_start();
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
-  header('location: login.php');
+    header('location: login.php');
+  }
+  if($_SESSION['role'] != 1){
+    header('location: login.php');
+  }
+
+  if(!empty($_POST['search'])){
+    setcookie('search', $_POST['search'], time() + (86400 * 30), "/");
+  }else{
+    if(empty($_GET['pageno'])){
+      unset($_COOKIE['search']); 
+      setcookie('search', null, -1, '/');
+    }
   }
 
 ?>
@@ -25,10 +37,10 @@
                 }else{
                   $pageno = 1;
                 }
-                  $numOfrecords = 3;
+                  $numOfrecords = 2;
                   $offest = ($pageno-1)*$numOfrecords;
 
-                if(empty($_POST['search'])){
+                if(empty($_POST['search']) && empty($_COOKIE['search'])){
 
                   $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC");
                   $stmt->execute();
@@ -39,7 +51,7 @@
                   $stmt->execute();
                   $result = $stmt->fetchAll();
                 }else{
-                  $search = $_POST['search'];
+                  $search = !empty($_POST['search']) ? $_POST['search'] : $_COOKIE['search'];
                   $stmt = $pdo->prepare("SELECT * FROM users WHERE name LIKE '%$search%' ORDER BY id DESC");
                   $stmt->execute();
                   $rawResult = $stmt->fetchAll();

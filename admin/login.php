@@ -9,10 +9,11 @@
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if($result){
-          if($result['role'] == '1'){
+          if($result['role'] == 1){
             if($result['password'] == $password){
               $_SESSION['user_id'] = $result['id'];
               $_SESSION['user_name'] = $result['name'];
+              $_SESSION['role'] = 1;
               $_SESSION['logged_in'] = time();
               header('location: index.php');
   

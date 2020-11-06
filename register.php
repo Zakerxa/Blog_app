@@ -13,16 +13,17 @@
             echo"<script>alert('Email duplicated');window.location.href='login.php';</script>";
         
         }else{
-          $stmt = $pdo->prepare("INSERT INTO users(name,email,password) VALUES(:name,:email,:password)");
+          $stmt = $pdo->prepare("INSERT INTO users(name,email,password,role) VALUES(:name,:email,:password,:role)");
           $result =$stmt->execute(
               array(
                 ':name' =>$name,
                 ':email' =>$email,
-                ':password' =>$password
+                ':password' =>$password,
+                ':role' => 0
               )
               );
           if($result){
-            echo"<script>alert('Successfully Reister! You can now login.');window.location.href('login.php');</script>";
+            echo"<script>alert('Successfully Reister! You can now login.');window.location.href='login.php';</script>";
             }
         }
        
