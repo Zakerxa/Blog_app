@@ -90,11 +90,11 @@ if($_POST){
                     <input type="hidden" name="id" value="<?php echo $output['id']?>">
                     <div class="form-group">
                         <label for="">Name</label><p style="color:red"><?php echo  empty($nameError) ? '' : '*'.$nameError ?></p>
-                        <input type="text" name="name" id="" class="form-control" value="<?php echo $output['name']?>">
+                        <input type="text" name="name" id="" class="form-control" value="<?php echo escape($output['name'])?>">
                     </div>
                     <div class="form-group"><p style="color:red"><?php echo  empty($emailError) ? '' : '*'.$emailError ?></p>
                         <label for="">Email</label>
-                        <input type="email" name="email" id="" class="form-control" value="<?php echo $output['email']?>">
+                        <input type="email" name="email" id="" class="form-control" value="<?php echo escape($output['email'])?>">
                     </div>
                     <div class="form-group">
                         <label for="">Password</label><p style="color:red"><?php echo  empty($passwordError) ? '' : '*'.$passwordError ?></p>

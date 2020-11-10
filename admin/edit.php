@@ -83,11 +83,11 @@ if($_POST){
                     <input type="hidden" name="id" value="<?php echo $output['id']?>">
                     <div class="form-group">
                         <label for="">Title</label><p style="color:red"><?php echo  empty($titleError) ? '' : '*'.$titleError ?></p>
-                        <input type="text" name="title" id="" class="form-control" value="<?php echo $output['title']?>">
+                        <input type="text" name="title" id="" class="form-control" value="<?php echo escape($output['title'])?>">
                     </div>
                     <div class="form-group">
                         <label for="">Content</label><p style="color:red"><?php echo  empty($contentError) ? '' : '*'.$contentError ?></p>
-                        <textarea name="content" id="" cols="30" rows="10" class="form-control"><?php echo $output['content']?></textarea>
+                        <textarea name="content" id="" cols="30" rows="10" class="form-control"><?php echo escape($output['content'])?></textarea>
                     </div>
                     <div class="form-group">
                         <label for="">Image</label><br>

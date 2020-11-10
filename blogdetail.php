@@ -94,14 +94,14 @@
             <div class="card card-widget">
               <div class="card-header">
                 <div class="card-title" style="text-align:center !important;float:none;">
-                  <h4><?php echo $result['title']?></h4>
+                  <h4><?php echo escape($result['title'])?></h4>
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <img class="img-fluid pad" src="admin/images/<?php echo $result['image']?>" alt="Photo" width="100%">
                 <br><br>
-                <p><?php echo $result['content']?></p><hr>
+                <p><?php echo escape($result['content'])?></p><hr>
                 <h3>Comments</h3><hr>
                 <a href="index.php" type="button" class="btn btn-default">Go Back</a>
               </div>
@@ -115,10 +115,10 @@
                   <?php foreach($cmtOutput as $key => $value){
                   ?>
                   <span class="username">
-                      <?php echo $outputauth[$key][0]['name'];?>
-                      <span class="text-muted float-right"><?php echo $value['created_at']?></span>
+                      <?php echo escape($outputauth[$key][0]['name']);?>
+                      <span class="text-muted float-right"><?php echo escape($value['created_at'])?></span>
                     </span><!-- /.username -->
-                    <?php echo $value['content']?>
+                    <?php echo escape($value['content'])?>
                   <?php
                   }
                   ?>
