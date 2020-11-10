@@ -2,6 +2,20 @@
     require 'config/config.php';
 
     if($_POST){
+      if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password'])<5){
+        if(empty($_POST['name'])){
+            $nameError = 'Name cannot be null!';
+        }
+        if(empty($_POST['email'])){
+            $emailError = 'Email cannot be null!';
+        }
+        if(empty($_POST['password'])){
+            $passwordError = 'Password cannot be null!';
+        }else if(strlen($_POST['password'])<5){
+            $passwordError = 'Password must be  5 charactersat least!';
+        }
+    }else{
+
         $name = $_POST['name'];
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -26,7 +40,7 @@
             echo"<script>alert('Successfully Reister! You can now login.');window.location.href='login.php';</script>";
             }
         }
-       
+      }
 
     }
 
@@ -64,29 +78,32 @@
 
       <form action="register.php" method="post">
         <div class="input-group mb-3">
-          <input type="text" name="name" class="form-control" placeholder="Name" required>
+          <input type="text" name="name" class="form-control" placeholder="Name" >
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+              <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
+        <p style="color:red"><?php echo  empty($nameError) ? '' : '*'.$nameError ?></p>
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email" required>
+          <input type="email" name="email" class="form-control" placeholder="Email" >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
         </div>
         </div>
+        <p style="color:red"><?php echo  empty($emailError) ? '' : '*'.$emailError ?></p>
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password" required>
+          <input type="password" name="password" class="form-control" placeholder="Password" >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
+        <p style="color:red"><?php echo  empty($passwordError) ? '' : '*'.$passwordError ?></p>
         <div class="row">
           <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Register</button>

@@ -10,6 +10,15 @@ if($_SESSION['role'] != 1){
 }
 
 if($_POST){
+    if(empty($_POST['title']) || empty($_POST['content'])){
+        if(empty($_POST['title'])){
+            $titleError = 'Title cannot be null!';
+        }
+        if(empty($_POST['content'])){
+            $contentError = 'Content cannot be null!';
+        }
+
+    }else{
         $id = $_POST['id'];
         $title = $_POST['title'];
         $content = $_POST['content'];
@@ -47,6 +56,7 @@ if($_POST){
 
     }
 }
+}
 
 
 ?>
@@ -68,11 +78,11 @@ if($_POST){
                 <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?php echo $output['id']?>">
                     <div class="form-group">
-                        <label for="">Title</label>
+                        <label for="">Title</label><p style="color:red"><?php echo  empty($titleError) ? '' : '*'.$titleError ?></p>
                         <input type="text" name="title" id="" class="form-control" value="<?php echo $output['title']?>">
                     </div>
                     <div class="form-group">
-                        <label for="">Content</label>
+                        <label for="">Content</label><p style="color:red"><?php echo  empty($contentError) ? '' : '*'.$contentError ?></p>
                         <textarea name="content" id="" cols="30" rows="10" class="form-control"><?php echo $output['content']?></textarea>
                     </div>
                     <div class="form-group">

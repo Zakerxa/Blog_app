@@ -11,6 +11,18 @@ if($_SESSION['role'] != 1){
 }
 
 if($_POST){
+    if(empty($_POST['title']) || empty($_POST['content']) || empty($_FILES['image']['name'])){
+        if(empty($_POST['title'])){
+            $titleError = 'Title cannot be null!';
+        }
+        if(empty($_POST['content'])){
+            $contentError = 'Content cannot be null!';
+        }
+        if(empty($_FILES['image']['image'])){
+            $imageError = 'Image cannot be null!';
+        }
+
+    }else{
         $title = $_POST['title'];
         $content = $_POST['content'];
         $user_id = $_SESSION['user_id'];
@@ -62,6 +74,7 @@ if($_POST){
 
     }
 }
+}
 
 
 ?>
@@ -78,15 +91,15 @@ if($_POST){
             <div class="card-body">
                 <form action="add.php" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="">Title</label>
-                        <input type="text" name="title" id="" class="form-control" required>
+                        <label for="">Title</label><p style="color:red"><?php echo  empty($titleError) ? '' : '*'.$titleError ?></p>
+                        <input type="text" name="title" id="" class="form-control" >
                     </div>
                     <div class="form-group">
-                        <label for="">Content</label>
-                        <textarea name="content" id="" cols="30" rows="10" class="form-control" required></textarea>
+                        <label for="">Content</label><p style="color:red"><?php echo  empty($contentError) ? '' : '*'.$contentError ?></p>
+                        <textarea name="content" id="" cols="30" rows="10" class="form-control" ></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="">Image</label>
+                        <label for="">Image</label><p style="color:red"><?php echo  empty($imageError) ? '' : '*'.$imageError ?></p>
                         <input type="file" name="image" id="" class="form-control">
                     </div>
                     <div class="form-group">

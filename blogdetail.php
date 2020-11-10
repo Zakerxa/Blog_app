@@ -7,7 +7,8 @@
   if($_SESSION['role'] != 0){
     header('location: login.php');
   }
-  
+
+
   //for showing result
   $stmt = $pdo->prepare("SELECT * FROM posts WHERE id=".$_GET['id']);
   $stmt->execute();
@@ -16,6 +17,13 @@
   //for comment
   $blogId = $_GET['id'];
   if($_POST){
+    if(empty($_POST['comment'])){
+      if(empty($_POST['comment'])){
+          $commentError = 'Comment cannot be null!';
+      }
+  
+  }else{
+
   $comment = $_POST['comment'];
 
   $stmt = $pdo->prepare("INSERT INTO comments(content,author_id,post_id) VALUES(:content,:author_id,:post_id)");
@@ -31,7 +39,9 @@
             header('location: blogdetail.php?id='.$_GET['id']);
 
         }
+      }
   }
+
   //for showing comments
   $stmtcmt = $pdo->prepare("SELECT * FROM comments WHERE post_id=$blogId");
   $stmtcmt->execute();
@@ -121,6 +131,7 @@
               <div class="card-footer">
                 <form action="" method="post">
                   <div class="img-push">
+                    <p style="color:red"><?php echo  empty($commentError) ? '' : '*'.$commentError ?></p>
                     <input type="text" name="comment" class="form-control form-control-sm" placeholder="Press enter to post comment">
                   </div>
                 </form>
