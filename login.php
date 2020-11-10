@@ -9,7 +9,7 @@
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if($result){
-          if($result['password'] == $password){
+          if(password_verify($password,$result['password'])){
             $_SESSION['user_id'] = $result['id'];
             $_SESSION['user_name'] = $result['name'];
             $_SESSION['role'] = 0;

@@ -89,7 +89,7 @@
                       <td><?php echo $i ?></td>
                       <td><?php echo $value['name'] ?></td>
                       <td><?php echo $value['email'] ?></td>
-                      <td><?php  if($value['role'] == '0'){echo "user";}else{echo "admin";} ?></td>
+                      <td><?php  echo $value['role'] == 0 ? 'user' : 'admin'; ?></td>
                       <td>
                         <div class="btn-group">
                           <div class="container">

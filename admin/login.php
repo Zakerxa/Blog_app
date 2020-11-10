@@ -4,13 +4,15 @@
     if($_POST){
         $email = $_POST['email'];
         $password = $_POST['password'];
+
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->bindValue(':email',$email);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if($result){
-          if($result['role'] == 1){
-            if($result['password'] == $password){
+          if($result['role']==1){
+            if(password_verify($password,$result['password'])){
               $_SESSION['user_id'] = $result['id'];
               $_SESSION['user_name'] = $result['name'];
               $_SESSION['role'] = 1;
@@ -19,7 +21,7 @@
   
             }
           }else{
-            echo"<script>alert('You're not Admin! Can't Login!');window.location.href='login.php';</script>";
+            echo"<script>alert('You are not admin, cannot Login!!');window.location.href='login.php';</script>";
           }
         }else{
           echo"<script>alert('Incorrect email and password');window.location.href='login.php';</script>";
