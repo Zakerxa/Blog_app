@@ -14,16 +14,15 @@
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($result){
-          if($result['role']==1){
-            if(password_verify($password,$result['password'])){
+          
+            if((password_verify($password,$result['password'])) && $result['role']==1){
               $_SESSION['user_id'] = $result['id'];
               $_SESSION['user_name'] = $result['name'];
               $_SESSION['role'] = 1;
               $_SESSION['logged_in'] = time();
               header('location: index.php');
   
-            }
-          }else{
+            }else{
             echo"<script>alert('You are not admin, cannot Login!!');window.location.href='login.php';</script>";
           }
         }else{
